@@ -1,118 +1,67 @@
-\#  Microservicio de Laboratorios (DSY2205)
+# Microservicio de Laboratorios (DSY2205)
 
+Microservicio REST con **Spring Boot 3.5.7** y **Java 21**. CRUD de laboratorios (nombre, ubicación, capacidad, encargado) persistido en **Oracle Autonomous Database** mediante **Wallet TNS**.
 
+## Contexto
+Asignatura **DSY2205 - Desarrollo de Microservicios**. Cubre: uso de Git, CRUD completo con Oracle, controladores REST y consultas a tablas reales.
 
-Microservicio REST desarrollado en \*\*Spring Boot 3 + Java 21\*\*.  
+## Tecnologías
+- Java 21
+- Spring Boot 3.5.7
+- Spring Web
+- Spring Data JPA
+- HikariCP
+- Oracle JDBC (ojdbc11)
+- Maven
 
-Expone endpoints para consultar, crear, actualizar y eliminar laboratorios de computación de la institución (nombre, ubicación, capacidad, encargado).  
-
-Persiste datos en \*\*Oracle Database (Autonomous / Wallet TNS)\*\*.
-
-
-
----
-
-
-
-\##  Contexto académico
-
-
-
-Proyecto realizado para la asignatura \*\*DSY2205 - Desarrollo de Microservicios\*\*.  
-
-Objetivos evaluados por el docente:
-
-1\. Uso correcto de repositorio Git / control de versiones.
-
-2\. CRUD completo conectado a base de datos Oracle.
-
-3\. Exposición de endpoints a través de un microservicio Spring Boot.
-
-4\. Consultas a tablas reales de la base de datos institucional.
-
-
-
-Este repositorio cubre esos 4 puntos.
-
-
-
----
-
-
-
-\##  Tecnologías principales
-
-
-
-\- \*\*Java 21\*\*
-
-\- \*\*Spring Boot 3.5.7\*\*
-
-\- Spring Web (Controladores REST)
-
-\- Spring Data JPA
-
-\- HikariCP (pool de conexiones)
-
-\- Oracle JDBC (ojdbc11)
-
-\- Maven
-
-
-
----
-
-
-
-\##  Configuración de la base de datos
-
-
-
+## Configuración
 Archivo: `src/main/resources/application.properties`
-
-
-
 ```properties
-
-\# Puerto del microservicio
-
 server.port=8081
 
-
-
-\# Conexión Oracle Autonomous usando wallet TNS
-
-spring.datasource.url=jdbc:oracle:thin:@bddsy2205\_high?TNS\_ADMIN=C:/microservicios/Wallet\_BDDSY2205
-
+spring.datasource.url=jdbc:oracle:thin:@bddsy2205_high?TNS_ADMIN=C:/microservicios/Wallet_BDDSY2205
 spring.datasource.username=ADMIN
-
-spring.datasource.password=Florencia.2014
-
+spring.datasource.password=********
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 
-
-
-\# Pool de conexiones
-
+spring.datasource.hikari.pool-name=HikariPool-Laboratorios
 spring.datasource.hikari.maximum-pool-size=5
-
 spring.datasource.hikari.minimum-idle=1
-
 spring.datasource.hikari.idle-timeout=30000
 
-spring.datasource.hikari.pool-name=HikariPool-Laboratorios
-
-
-
-\# JPA / Hibernate
-
 spring.jpa.hibernate.ddl-auto=none
-
 spring.jpa.show-sql=true
-
-spring.jpa.properties.hibernate.format\_sql=true
-
+spring.jpa.properties.hibernate.format_sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.OracleDialect
+````
 
+## Build y ejecución
 
+```powershell
+mvn clean package -DskipTests
+java "-Doracle.net.tns_admin=C:\microservicios\Wallet_BDDSY2205" -jar target\microservicio-laboratorios-0.0.1-SNAPSHOT.jar
+```
 
+## Endpoints
+
+Base URL: `http://localhost:8081/api/laboratorios`
+
+* `GET /api/laboratorios`
+* `GET /api/laboratorios/{id}`
+* `POST /api/laboratorios`
+* `PUT /api/laboratorios/{id}`
+* `DELETE /api/laboratorios/{id}`
+
+## Pruebas rápidas (PowerShell cURL)
+
+```powershell
+curl http://localhost:8081/api/laboratorios
+curl http://localhost:8081/api/laboratorios/1
+curl -X POST "http://localhost:8081/api/laboratorios" ^
+  -H "Content-Type: application/json" ^
+  -d "{`"nombre`":`"Lab Redes`",`"ubicacion`":`"Edificio A`",`"capacidad`":30,`"encargado`":`"Juan`"}"
+curl -X PUT "http://localhost:8081/api/laboratorios/1" ^
+  -H "Content-Type: application/json" ^
+  -d "{`"nombre`":`"Lab Redes 2`",`"ubicacion`":`"Edificio B`",`"capacidad`":28,`"encargado`":`"Ana`"}"
+curl -X DELETE "http://localhost:8081/api/laboratorios/1"
+```
