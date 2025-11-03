@@ -4,53 +4,57 @@ import cl.duoc.dsy2205.microservicio_laboratorios.entity.Laboratorio;
 import cl.duoc.dsy2205.microservicio_laboratorios.repository.LaboratorioRepository;
 import cl.duoc.dsy2205.microservicio_laboratorios.service.LaboratorioService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@Transactional
 public class LaboratorioServiceImpl implements LaboratorioService {
 
-    private final LaboratorioRepository laboratorioRepository;
+    private final LaboratorioRepository repo;
 
-    public LaboratorioServiceImpl(LaboratorioRepository laboratorioRepository) {
-        this.laboratorioRepository = laboratorioRepository;
+    public LaboratorioServiceImpl(LaboratorioRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public List<Laboratorio> findAll() {
-        return laboratorioRepository.findAll();
+    public List<Laboratorio> listar() {
+        return repo.findAll();
     }
 
     @Override
-    public Optional<Laboratorio> findById(Long id) {
-        return laboratorioRepository.findById(id);
+    public Laboratorio obtenerPorId(Long idLab) {
+        return repo.findById(idLab)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Laboratorio no encontrado"));
     }
 
     @Override
-    public Laboratorio create(Laboratorio lab) {
-
-        return laboratorioRepository.save(lab);
+    public Laboratorio crear(Laboratorio lab) {
+        lab.setIdLab(null);
+        return repo.save(lab);
     }
 
     @Override
-    public Laboratorio update(Long id, Laboratorio lab) {
-        return laboratorioRepository.findById(id)
-                .map(existente -> {
-                    existente.setNombre(lab.getNombre());
-                    existente.setUbicacion(lab.getUbicacion());
-                    existente.setCapacidad(lab.getCapacidad());
-                    existente.setEncargadoId(lab.getEncargadoId());
-                    return laboratorioRepository.save(existente);
-                })
-                .orElseThrow(() -> new RuntimeException("Laboratorio con id " + id + " no encontrado"));
+    public Laboratorio actualizar(Long idLab, Laboratorio lab) {
+        Laboratorio actual = obtenerPorId(idLab);
+        actual.setNombre(lab.getNombre());
+        actual.setUbicacion(lab.getUbicacion());
+        actual.setCapacidad(lab.getCapacidad());
+        actual.setEncargadoId(lab.getEncargadoId());
+        return repo.save(actual);
     }
 
     @Override
-    public void delete(Long id) {
-        if (!laboratorioRepository.existsById(id)) {
-            throw new RuntimeException("Laboratorio con id " + id + " no encontrado");
-        }
-        laboratorioRepository.deleteById(id);
+    public void eliminar(Long idLab) {
+        Laboratorio actual = obtenerPorId(idLab);
+        repo.delete(actual);
+    }
+
+    @Override
+    public List<Laboratorio> buscarPorNombre(String nombre) {
+        return repo.findByNombreContainingIgnoreCase(nombre == null ? "" : nombre);
     }
 }

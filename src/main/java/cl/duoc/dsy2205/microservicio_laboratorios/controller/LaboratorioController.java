@@ -2,7 +2,6 @@ package cl.duoc.dsy2205.microservicio_laboratorios.controller;
 
 import cl.duoc.dsy2205.microservicio_laboratorios.entity.Laboratorio;
 import cl.duoc.dsy2205.microservicio_laboratorios.service.LaboratorioService;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,49 +10,44 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/laboratorios")
+@CrossOrigin(origins = "*")
 public class LaboratorioController {
 
-    private final LaboratorioService laboratorioService;
+    private final LaboratorioService service;
 
-    public LaboratorioController(LaboratorioService laboratorioService) {
-        this.laboratorioService = laboratorioService;
+    public LaboratorioController(LaboratorioService service) {
+        this.service = service;
     }
 
-    // READ ALL
     @GetMapping
-    public ResponseEntity<List<Laboratorio>> getAll() {
-        return ResponseEntity.ok(laboratorioService.findAll());
+    public List<Laboratorio> listar() {
+        return service.listar();
     }
 
-    // READ ONE
     @GetMapping("/{id}")
-    public ResponseEntity<Laboratorio> getById(@PathVariable Long id) {
-        return laboratorioService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Laboratorio obtener(@PathVariable("id") Long id) {
+        return service.obtenerPorId(id);
     }
 
-    // CREATE
+    @GetMapping("/search")
+    public List<Laboratorio> buscar(@RequestParam(name = "nombre", required = false) String nombre) {
+        return service.buscarPorNombre(nombre);
+    }
+
     @PostMapping
-    public ResponseEntity<Laboratorio> create(@Valid @RequestBody Laboratorio lab) {
-        Laboratorio creado = laboratorioService.create(lab);
-        return ResponseEntity
-                .created(URI.create("/api/laboratorios/" + creado.getIdLab()))
-                .body(creado);
+    public ResponseEntity<Laboratorio> crear(@RequestBody Laboratorio lab) {
+        Laboratorio creado = service.crear(lab);
+        return ResponseEntity.created(URI.create("/api/laboratorios/" + creado.getIdLab())).body(creado);
     }
 
-    // UPDATE
     @PutMapping("/{id}")
-    public ResponseEntity<Laboratorio> update(@PathVariable Long id,
-                                              @Valid @RequestBody Laboratorio lab) {
-        Laboratorio actualizado = laboratorioService.update(id, lab);
-        return ResponseEntity.ok(actualizado);
+    public Laboratorio actualizar(@PathVariable("id") Long id, @RequestBody Laboratorio lab) {
+        return service.actualizar(id, lab);
     }
 
-    // DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        laboratorioService.delete(id);
+    public ResponseEntity<Void> eliminar(@PathVariable("id") Long id) {
+        service.eliminar(id);
         return ResponseEntity.noContent().build();
     }
 }
