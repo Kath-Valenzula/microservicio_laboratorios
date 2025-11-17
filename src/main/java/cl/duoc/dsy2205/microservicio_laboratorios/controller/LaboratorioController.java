@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.duoc.dsy2205.microservicio_laboratorios.dto.LaboratorioDTO;
 import cl.duoc.dsy2205.microservicio_laboratorios.entity.Laboratorio;
+import cl.duoc.dsy2205.microservicio_laboratorios.mapper.LaboratorioMapper;
 import cl.duoc.dsy2205.microservicio_laboratorios.service.LaboratorioService;
 import jakarta.validation.Valid;
 
@@ -36,15 +38,15 @@ public class LaboratorioController {
     }
 
     @GetMapping
-    public List<Laboratorio> listar() {
+    public List<LaboratorioDTO> listar() {
         log.info("GET /api/laboratorios");
-        return service.listar();
+        return service.listar().stream().map(LaboratorioMapper::toDto).toList();
     }
 
     @GetMapping("/{id}")
-    public Laboratorio obtener(@PathVariable("id") Long id) {
+    public LaboratorioDTO obtener(@PathVariable("id") Long id) {
         log.info("GET /api/laboratorios/{}", id);
-        return service.obtenerPorId(id);
+        return LaboratorioMapper.toDto(service.obtenerPorId(id));
     }
 
     @GetMapping("/search")
@@ -53,18 +55,21 @@ public class LaboratorioController {
     }
 
     @PostMapping
-    public ResponseEntity<Laboratorio> crear(@Valid @RequestBody Laboratorio lab) {
+    public ResponseEntity<LaboratorioDTO> crear(@Valid @RequestBody LaboratorioDTO labDto) {
+        Laboratorio lab = LaboratorioMapper.toEntity(labDto);
         log.info("POST /api/laboratorios - creating laboratorio: {}", lab.getNombre());
         Laboratorio creado = service.crear(lab);
-    Long id = Objects.requireNonNull(creado.getIdLab(), "Created laboratorio id is null");
-    URI location = Objects.requireNonNull(URI.create("/api/laboratorios/" + id));
-    return ResponseEntity.created(location).body(creado);
+        Long id = Objects.requireNonNull(creado.getIdLab(), "Created laboratorio id is null");
+        URI location = Objects.requireNonNull(URI.create("/api/laboratorios/" + id));
+        return ResponseEntity.created(location).body(LaboratorioMapper.toDto(creado));
     }
 
     @PutMapping("/{id}")
-    public Laboratorio actualizar(@PathVariable("id") Long id, @Valid @RequestBody Laboratorio lab) {
+    public LaboratorioDTO actualizar(@PathVariable("id") Long id, @Valid @RequestBody LaboratorioDTO labDto) {
         log.info("PUT /api/laboratorios/{} - updating laboratorio", id);
-        return service.actualizar(id, lab);
+        Laboratorio lab = LaboratorioMapper.toEntity(labDto);
+        Laboratorio updated = service.actualizar(id, lab);
+        return LaboratorioMapper.toDto(updated);
     }
 
     @DeleteMapping("/{id}")

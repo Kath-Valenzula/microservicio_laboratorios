@@ -1,8 +1,16 @@
 package cl.duoc.dsy2205.microservicio_laboratorios.entity;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "LABORATORIOS")
@@ -15,9 +23,12 @@ public class Laboratorio implements Serializable {
     @Column(name = "ID_LAB")
     private Long idLab;
 
+    @NotNull
+    @Size(max = 100)
     @Column(name = "NOMBRE", nullable = false, length = 100)
     private String nombre;
 
+    @Size(max = 150)
     @Column(name = "UBICACION", length = 150) // DDL: VARCHAR2(150)
     private String ubicacion;
 

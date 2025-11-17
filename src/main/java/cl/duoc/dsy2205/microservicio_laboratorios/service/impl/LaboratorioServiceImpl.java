@@ -6,10 +6,8 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import cl.duoc.dsy2205.microservicio_laboratorios.entity.Laboratorio;
 import cl.duoc.dsy2205.microservicio_laboratorios.repository.LaboratorioRepository;
@@ -36,7 +34,7 @@ public class LaboratorioServiceImpl implements LaboratorioService {
     public Laboratorio obtenerPorId(Long idLab) {
     Objects.requireNonNull(idLab, "idLab debe no ser null");
     return repo.findById(idLab)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Laboratorio no encontrado"));
+        .orElseThrow(() -> new cl.duoc.dsy2205.microservicio_laboratorios.exception.ResourceNotFoundException("Laboratorio no encontrado id=" + idLab));
     }
 
     @Override
