@@ -1,16 +1,26 @@
 package cl.duoc.dsy2205.microservicio_laboratorios.controller;
 
-import cl.duoc.dsy2205.microservicio_laboratorios.entity.Laboratorio;
-import cl.duoc.dsy2205.microservicio_laboratorios.service.LaboratorioService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 import java.util.List;
-import jakarta.validation.Valid;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import cl.duoc.dsy2205.microservicio_laboratorios.entity.Laboratorio;
+import cl.duoc.dsy2205.microservicio_laboratorios.service.LaboratorioService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/laboratorios")
@@ -46,7 +56,9 @@ public class LaboratorioController {
     public ResponseEntity<Laboratorio> crear(@Valid @RequestBody Laboratorio lab) {
         log.info("POST /api/laboratorios - creating laboratorio: {}", lab.getNombre());
         Laboratorio creado = service.crear(lab);
-        return ResponseEntity.created(URI.create("/api/laboratorios/" + creado.getIdLab())).body(creado);
+    Long id = Objects.requireNonNull(creado.getIdLab(), "Created laboratorio id is null");
+    URI location = Objects.requireNonNull(URI.create("/api/laboratorios/" + id));
+    return ResponseEntity.created(location).body(creado);
     }
 
     @PutMapping("/{id}")
