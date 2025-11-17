@@ -3,6 +3,9 @@ package cl.duoc.dsy2205.microservicio_laboratorios.service.impl;
 import cl.duoc.dsy2205.microservicio_laboratorios.entity.Laboratorio;
 import cl.duoc.dsy2205.microservicio_laboratorios.repository.LaboratorioRepository;
 import cl.duoc.dsy2205.microservicio_laboratorios.service.LaboratorioService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -13,6 +16,8 @@ import java.util.List;
 @Service
 @Transactional
 public class LaboratorioServiceImpl implements LaboratorioService {
+
+    private static final Logger log = LoggerFactory.getLogger(LaboratorioServiceImpl.class);
 
     private final LaboratorioRepository repo;
 
@@ -50,7 +55,12 @@ public class LaboratorioServiceImpl implements LaboratorioService {
     @Override
     public void eliminar(Long idLab) {
         Laboratorio actual = obtenerPorId(idLab);
-        repo.delete(actual);
+        try {
+            repo.delete(actual);
+        } catch (DataIntegrityViolationException ex) {
+            log.warn("Attempt to delete laboratorio {} failed due to integrity constraints", idLab);
+            throw new cl.duoc.dsy2205.microservicio_laboratorios.exception.IntegrityViolationException("No se puede eliminar el laboratorio porque tiene reservas asociadas");
+        }
     }
 
     @Override

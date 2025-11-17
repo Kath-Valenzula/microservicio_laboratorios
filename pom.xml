@@ -43,6 +43,12 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!-- Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <!-- Driver Oracle + librerías SSL del wallet AUTONOMOUS DB -->
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
@@ -59,12 +65,9 @@
         </dependency>
 
         <!-- Lombok (si lo usas) -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.34</version>
-            <scope>provided</scope>
-        </dependency>
+        <!-- Lombok removed: not used in source files, avoid IDE javac processor init errors -->
+
+        <!-- (No test-scope duplicate) -->
 
         <!-- Test -->
         <dependency>
@@ -91,6 +94,7 @@
                 <version>3.14.1</version>
                 <configuration>
                     <release>${java.version}</release>
+                    <!-- No annotation processors configured -->
                 </configuration>
             </plugin>
 
