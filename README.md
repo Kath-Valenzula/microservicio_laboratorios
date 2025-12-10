@@ -1,13 +1,13 @@
 # Microservicio de Laboratorios (DSY2205)
 
-Microservicio REST con **Spring Boot 3.5.7** y **Java 21**. CRUD de laboratorios (nombre, ubicación, capacidad, encargado) persistido en **Oracle Autonomous Database** mediante **Wallet TNS**.
+Microservicio REST con **Spring Boot 3.5.8** y **Java 21**. CRUD de laboratorios (nombre, ubicación, capacidad, encargado) persistido en **Oracle Autonomous Database** mediante **Wallet TNS**.
 
 ## Contexto
 Asignatura **DSY2205 - Desarrollo de Microservicios**. Cubre: uso de Git, CRUD completo con Oracle, controladores REST y consultas a tablas reales.
 
 ## Tecnologías
 - Java 21
-- Spring Boot 3.5.7
+- Spring Boot 3.5.8
 - Spring Web
 - Spring Data JPA
 - HikariCP
@@ -65,3 +65,7 @@ curl -X PUT "http://localhost:8081/api/laboratorios/1" ^
   -d "{`"nombre`":`"Lab Redes 2`",`"ubicacion`":`"Edificio B`",`"capacidad`":28,`"encargado`":`"Ana`"}"
 curl -X DELETE "http://localhost:8081/api/laboratorios/1"
 ```
+
+## Documentacion de trabajo
+- Arquetipo BackEnd: `docs/arquetipo-backend.md`
+- Estrategia Git (Trunk Based Development): `docs/git-strategy.md`

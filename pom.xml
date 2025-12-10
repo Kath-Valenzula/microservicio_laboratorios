@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.7</version>
+        <version>3.5.8</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -16,11 +16,13 @@
     <artifactId>microservicio-laboratorios</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>microservicio-laboratorios</name>
-    <description>Microservicio gestión de laboratorios - DSY2205</description>
+    <description>Microservicio gestion de laboratorios - DSY2205</description>
 
     <properties>
         <java.version>21</java.version>
         <oracle.driver.version>23.7.0.25.01</oracle.driver.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencies>
@@ -49,13 +51,13 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- Actuator para health y métricas -->
+        <!-- Actuator para health y metricas -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- Driver Oracle + librerías SSL del wallet AUTONOMOUS DB -->
+        <!-- Driver Oracle + librerias SSL del wallet AUTONOMOUS DB -->
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc11</artifactId>
@@ -93,21 +95,10 @@
     <build>
         <plugins>
 
-            <!-- Plugin estándar Spring Boot -->
+            <!-- Plugin estandar Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
-            <!-- Compiler plugin para asegurar Java 21 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.1</version>
-                <configuration>
-                    <release>${java.version}</release>
-                    <!-- No annotation processors configured -->
-                </configuration>
             </plugin>
 
         </plugins>
