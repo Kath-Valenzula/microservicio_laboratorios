@@ -26,7 +26,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/laboratorios")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class LaboratorioController {
 
     private static final Logger log = LoggerFactory.getLogger(LaboratorioController.class);
