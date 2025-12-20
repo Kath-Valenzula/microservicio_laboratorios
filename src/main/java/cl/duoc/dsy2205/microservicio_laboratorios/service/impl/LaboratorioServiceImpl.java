@@ -18,6 +18,8 @@ import cl.duoc.dsy2205.microservicio_laboratorios.service.LaboratorioService;
 public class LaboratorioServiceImpl implements LaboratorioService {
 
     private static final Logger log = LoggerFactory.getLogger(LaboratorioServiceImpl.class);
+    private static final String ID_LAB_NULL = "idLab debe no ser null";
+    private static final String LABORATORIO_NULL = "laboratorio debe no ser null";
 
     private final LaboratorioRepository repo;
 
@@ -32,22 +34,22 @@ public class LaboratorioServiceImpl implements LaboratorioService {
 
     @Override
     public Laboratorio obtenerPorId(Long idLab) {
-    Objects.requireNonNull(idLab, "idLab debe no ser null");
+    Objects.requireNonNull(idLab, ID_LAB_NULL);
     return repo.findById(idLab)
         .orElseThrow(() -> new cl.duoc.dsy2205.microservicio_laboratorios.exception.ResourceNotFoundException("Laboratorio no encontrado id=" + idLab));
     }
 
     @Override
     public Laboratorio crear(Laboratorio lab) {
-        Objects.requireNonNull(lab, "laboratorio debe no ser null");
+        Objects.requireNonNull(lab, LABORATORIO_NULL);
         lab.setIdLab(null);
         return Objects.requireNonNull(repo.save(lab));
     }
 
     @Override
     public Laboratorio actualizar(Long idLab, Laboratorio lab) {
-        Objects.requireNonNull(lab, "laboratorio debe no ser null");
-        Objects.requireNonNull(idLab, "idLab debe no ser null");
+        Objects.requireNonNull(lab, LABORATORIO_NULL);
+        Objects.requireNonNull(idLab, ID_LAB_NULL);
         Laboratorio actual = obtenerPorId(idLab);
         actual.setNombre(lab.getNombre());
         actual.setUbicacion(lab.getUbicacion());
@@ -58,12 +60,12 @@ public class LaboratorioServiceImpl implements LaboratorioService {
 
     @Override
     public void eliminar(Long idLab) {
-        Objects.requireNonNull(idLab, "idLab debe no ser null");
+        Objects.requireNonNull(idLab, ID_LAB_NULL);
         Laboratorio actual = obtenerPorId(idLab);
         try {
             repo.delete(Objects.requireNonNull(actual));
         } catch (DataIntegrityViolationException ex) {
-            log.warn("Attempt to delete laboratorio {} failed due to integrity constraints", idLab);
+            log.warn("Attempt to delete laboratorio failed due to integrity constraints");
             throw new cl.duoc.dsy2205.microservicio_laboratorios.exception.IntegrityViolationException("No se puede eliminar el laboratorio porque tiene reservas asociadas");
         }
     }

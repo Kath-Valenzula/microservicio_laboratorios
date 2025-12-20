@@ -23,6 +23,12 @@
         <oracle.driver.version>23.7.0.25.01</oracle.driver.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <sonar.projectKey>kath-valenzula_microservicio_laboratorios</sonar.projectKey>
+        <sonar.projectName>microservicio_laboratorios</sonar.projectName>
+        <sonar.organization>kath-valenzula</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.exclusions>**/config/**,**/*Application*</sonar.coverage.exclusions>
     </properties>
 
     <dependencies>

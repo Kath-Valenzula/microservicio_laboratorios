@@ -45,7 +45,7 @@ public class LaboratorioController {
 
     @GetMapping("/{id}")
     public LaboratorioDTO obtener(@PathVariable("id") Long id) {
-        log.info("GET /api/laboratorios/{}", id);
+        log.info("GET /api/laboratorios/{id}");
         return LaboratorioMapper.toDto(service.obtenerPorId(id));
     }
 
@@ -57,7 +57,7 @@ public class LaboratorioController {
     @PostMapping
     public ResponseEntity<LaboratorioDTO> crear(@Valid @RequestBody LaboratorioDTO labDto) {
         Laboratorio lab = LaboratorioMapper.toEntity(labDto);
-        log.info("POST /api/laboratorios - creating laboratorio: {}", lab.getNombre());
+        log.info("POST /api/laboratorios - creating laboratorio");
         Laboratorio creado = service.crear(lab);
         Long id = Objects.requireNonNull(creado.getIdLab(), "Created laboratorio id is null");
         URI location = Objects.requireNonNull(URI.create("/api/laboratorios/" + id));
@@ -66,7 +66,7 @@ public class LaboratorioController {
 
     @PutMapping("/{id}")
     public LaboratorioDTO actualizar(@PathVariable("id") Long id, @Valid @RequestBody LaboratorioDTO labDto) {
-        log.info("PUT /api/laboratorios/{} - updating laboratorio", id);
+        log.info("PUT /api/laboratorios/{id} - updating laboratorio");
         Laboratorio lab = LaboratorioMapper.toEntity(labDto);
         Laboratorio updated = service.actualizar(id, lab);
         return LaboratorioMapper.toDto(updated);
@@ -74,7 +74,7 @@ public class LaboratorioController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable("id") Long id) {
-        log.info("DELETE /api/laboratorios/{} - deleting laboratorio", id);
+        log.info("DELETE /api/laboratorios/{id} - deleting laboratorio");
         service.eliminar(id);
         return ResponseEntity.noContent().build();
     }
