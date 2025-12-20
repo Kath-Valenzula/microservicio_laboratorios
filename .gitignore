@@ -32,6 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 
+*.code-workspace
+
 /target/
 /.idea/
 /*.iml
