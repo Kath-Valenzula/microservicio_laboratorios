@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../../../../.."
+		},
+		{
+			"path": "../../../../../../../../../../Users/Kath Stark/DSY2205_Frontend/labcontrol8"
+		}
+	],
+	"settings": {
+		"java.compile.nullAnalysis.mode": "automatic",
+		"java.configuration.updateBuildConfiguration": "automatic",
+		"chatgpt.commentCodeLensEnabled": true,
+		"chatgpt.openOnStartup": true
+	}
+}
